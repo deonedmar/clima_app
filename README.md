@@ -1,4 +1,4 @@
-# clima_app
+# clima_app    https://climaappedmar.streamlit.app/
 Climate Extractor - Monitoramento Climático Histórico
 O sistema consiste em um dashboard interativo que extrai, processa e visualiza dados climáticos históricos de qualquer localidade do mundo.
 Extração de Dados: Conexão com a API Open-Meteo (Modelo ERA5) para obter dados históricos desde 1940.
