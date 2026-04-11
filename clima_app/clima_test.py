@@ -7,12 +7,10 @@ from streamlit_folium import st_folium
 import folium
 import datetime
 
-# 1. Configuração e Estilo Visual
+
 st.set_page_config(page_title="Climate Extractor", layout="wide", page_icon="☁️")
 
-# Cores RGBA que definimos
-# Fundo dos cards: rgba(255, 255, 255, 0.85)
-# Fonte Preta: rgba(0, 0, 0, 1) ou #000000
+
 st.markdown("""
     <style>
     .stApp {
@@ -44,7 +42,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 
-# 2. Funções de Backend
+
 def obter_coordenadas(cidade):
     try:
         geolocator = Nominatim(user_agent="skymonitor_vfinal")
@@ -87,7 +85,7 @@ def buscar_dados(lat, lon, inicio, fim):
         return None
 
 
-# 3. Sidebar
+
 with st.sidebar:
     st.markdown("### ☁️ Sobre o Sistema")
     st.markdown(
@@ -95,7 +93,7 @@ with st.sidebar:
         unsafe_allow_html=True)
     st.info("@deonedmar Eddy Minimum")
 
-# 4. Interface Principal
+
 st.title("☁️ Climate Extractor")
 tab1, tab2 = st.tabs(["🚀 Extração de Dados", "📊 Análise Visual"])
 
@@ -103,7 +101,7 @@ with tab1:
     st.markdown("### 📥 Configurar Coleta")
     c1, c2, c3 = st.columns([2, 1, 1])
 
-    # AJUSTE PARA ACEITAR DESDE 1940
+    # AJUSTE DATA 1940
     data_minima = datetime.date(1940, 1, 1)
     data_hoje = datetime.date.today()
 
