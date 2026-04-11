@@ -1,0 +1,7 @@
+streamlit
+pandas
+openmeteo-requests
+geopy
+plotly
+streamlit-folium
+folium
