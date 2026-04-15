@@ -45,7 +45,7 @@ st.markdown("""
 
 def obter_coordenadas(cidade):
     try:
-        geolocator = ArcGIS() # Não precisa de user_agent
+        geolocator = ArcGIS() # Não precisa de user_agent, alterado todo bloco
         location = geolocator.geocode(cidade)
         if location:
             return location.latitude, location.longitude, location.address
