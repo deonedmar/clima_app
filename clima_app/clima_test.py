@@ -91,7 +91,7 @@ with st.sidebar:
     st.markdown(
         '<div class="info-box"><strong>📅 Dados Disponíveis</strong><br>Consultas históricas desde 01/01/1940.<br><br><strong>🌐 Fonte</strong><br>Modelo ERA5 (ECMWF).</div>',
         unsafe_allow_html=True)
-    st.info("@deonedmar Eddy Minimum")
+    st.info("deonedmar@gmail.com Eddy Minimum")
 
 
 st.title("☁️ Climate Extractor")
