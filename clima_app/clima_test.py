@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from streamlit_folium import st_folium
 import folium
 import datetime
-
+from geopy.geocoders import ArcGIS
 
 st.set_page_config(page_title="Climate Extractor", layout="wide", page_icon="☁️")
 
@@ -45,12 +45,12 @@ st.markdown("""
 
 def obter_coordenadas(cidade):
     try:
-        geolocator = Nominatim(user_agent="skymonitor_vfinal")
+        geolocator = ArcGIS() # Não precisa de user_agent
         location = geolocator.geocode(cidade)
         if location:
             return location.latitude, location.longitude, location.address
-    except:
-        return None, None, None
+    except Exception as e:
+        st.error(f"Erro na busca: {e}")
     return None, None, None
 
 
