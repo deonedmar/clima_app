@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 from streamlit_folium import st_folium
 import folium
 import datetime
+import calendar
 from geopy.geocoders import ArcGIS
 
 st.set_page_config(page_title="Climate Extractor", layout="wide", page_icon="☁️")
@@ -42,10 +43,9 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 
-
 def obter_coordenadas(cidade):
     try:
-        geolocator = ArcGIS() # Não precisa de user_agent, alterado todo bloco
+        geolocator = ArcGIS()  # Não precisa de user_agent, alterado todo bloco
         location = geolocator.geocode(cidade)
         if location:
             return location.latitude, location.longitude, location.address
@@ -85,6 +85,41 @@ def buscar_dados(lat, lon, inicio, fim):
         return None
 
 
+def seletor_data_dmy(label, key_prefix, data_padrao, ano_min, ano_max):
+    """
+    Seletor de data em três selectbox (Dia / Mês / Ano), no formato dd/mm/aaaa.
+    Substitui o st.date_input nativo para evitar o bug do dropdown de anos
+    (que não rola até anos distantes quando o intervalo min/max é muito grande).
+    """
+    st.markdown(f"**{label}**")
+    cd, cm, ca = st.columns(3)
+
+    with ca:
+        ano = st.selectbox(
+            "Ano", options=list(range(ano_max, ano_min - 1, -1)),
+            index=list(range(ano_max, ano_min - 1, -1)).index(data_padrao.year),
+            key=f"{key_prefix}_ano"
+        )
+    with cm:
+        meses_pt = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+        mes = st.selectbox(
+            "Mês", options=list(range(1, 13)),
+            index=data_padrao.month - 1,
+            format_func=lambda m: meses_pt[m - 1],
+            key=f"{key_prefix}_mes"
+        )
+    with cd:
+        dias_no_mes = calendar.monthrange(ano, mes)[1]
+        dia_default = min(data_padrao.day, dias_no_mes)
+        dia = st.selectbox(
+            "Dia", options=list(range(1, dias_no_mes + 1)),
+            index=dia_default - 1,
+            format_func=lambda d: f"{d:02d}",
+            key=f"{key_prefix}_dia"
+        )
+
+    return datetime.date(ano, mes, dia)
+
 
 with st.sidebar:
     st.markdown("### ☁️ Sobre o Sistema")
@@ -108,9 +143,15 @@ with tab1:
     with c1:
         cid = st.text_input("Cidade e Estado", "Praia Grande, SP")
     with c2:
-        d_ini = st.date_input("Data Inicial", value=data_hoje, min_value=data_minima, max_value=data_hoje)
+        d_ini = seletor_data_dmy(
+            "Data Inicial", "d_ini", data_padrao=data_hoje,
+            ano_min=data_minima.year, ano_max=data_hoje.year
+        )
     with c3:
-        d_fim = st.date_input("Data Final", value=data_hoje, min_value=data_minima, max_value=data_hoje)
+        d_fim = seletor_data_dmy(
+            "Data Final", "d_fim", data_padrao=data_hoje,
+            ano_min=data_minima.year, ano_max=data_hoje.year
+        )
 
     if st.button("Executar Extração"):
         if d_ini > d_fim:
