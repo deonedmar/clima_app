@@ -130,9 +130,16 @@ with st.sidebar:
 
 
 st.title("☁️ Climate Extractor")
-tab1, tab2 = st.tabs(["🚀 Extração de Dados", "📊 Análise Visual"])
 
-with tab1:
+if 'aba_ativa' not in st.session_state:
+    st.session_state['aba_ativa'] = "🚀 Extração de Dados"
+
+aba = st.radio(
+    "nav", ["🚀 Extração de Dados", "📊 Análise Visual"],
+    key="aba_ativa", horizontal=True, label_visibility="collapsed"
+)
+
+if aba == "🚀 Extração de Dados":
     st.markdown("### 📥 Configurar Coleta")
     c1, c2, c3 = st.columns([2, 1, 1])
 
@@ -164,13 +171,14 @@ with tab1:
                     if df_res is not None and not df_res.empty:
                         st.session_state['df_final'] = df_res
                         st.session_state['local_final'] = ender
-                        st.success(f"Dados coletados com sucesso para: {ender}")
+                        st.session_state['aba_ativa'] = "📊 Análise Visual"
+                        st.rerun()
                     else:
                         st.error("Sem dados para este período ou erro na API.")
                 else:
                     st.error("Localização não encontrada. Tente: Cidade, Estado, País.")
 
-with tab2:
+if aba == "📊 Análise Visual":
     if 'df_final' in st.session_state:
         df = st.session_state['df_final']
         st.subheader(f"📍 {st.session_state['local_final']}")
