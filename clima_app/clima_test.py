@@ -131,6 +131,9 @@ with st.sidebar:
 
 st.title("☁️ Climate Extractor")
 
+if 'forcar_aba' in st.session_state:
+    st.session_state['aba_ativa'] = st.session_state.pop('forcar_aba')
+
 if 'aba_ativa' not in st.session_state:
     st.session_state['aba_ativa'] = "🚀 Extração de Dados"
 
@@ -171,7 +174,7 @@ if aba == "🚀 Extração de Dados":
                     if df_res is not None and not df_res.empty:
                         st.session_state['df_final'] = df_res
                         st.session_state['local_final'] = ender
-                        st.session_state['aba_ativa'] = "📊 Análise Visual"
+                        st.session_state['forcar_aba'] = "📊 Análise Visual"
                         st.rerun()
                     else:
                         st.error("Sem dados para este período ou erro na API.")
